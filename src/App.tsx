@@ -1,26 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useDispatch, useSelector} from "react-redux";
+import Home from "./Components/Home";
+import Login from "./Components/Login";
+import { selectUser } from "./features/loggedUserSlice";
+import { useEffect } from "react";
+import { fetchUsers } from "./features/UsersSlice";
+import { AppDispatch } from "./App/Store";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+  let loggedUser = useSelector(selectUser)
 
-export default App;
+  const dispatch = useDispatch<AppDispatch>()
+  useEffect(() => {
+      dispatch(fetchUsers());}, [dispatch]);
+
+  return (<div>
+      {loggedUser.loggedUser ? <Home/> : <Login/>}
+  </div>);
+};
+
+export default App
