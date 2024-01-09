@@ -4,17 +4,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectUsers } from '../features/UsersSlice'
 import '../css/index.css'
 import { AppDispatch } from '../App/Store'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 	const [email, setEmail] = useState('')
 	const users = useSelector(selectUsers)
-
+	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
 	const handleLogin = (event: React.FormEvent) => {
 		event.preventDefault()
 		let user = users.find((user) => user.email === email)
 		if (user !== undefined) {
 			dispatch(login(user))
+			navigate("/posts")
 			return
 		}
 		console.log('User not found')
