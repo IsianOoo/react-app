@@ -26,6 +26,9 @@ const CommentsComponent: React.FC<CommentsProps> = ({ postId }) => {
 	})
 	const handleAddComment = (event: React.FormEvent) => {
 		event.preventDefault()
+		if (title == '' || comment == '') {
+			return
+		}
 		try {
 			dispatch(addComment({ postId, title, email: user?.email, comment }))
 		} catch (e) {
@@ -38,6 +41,10 @@ const CommentsComponent: React.FC<CommentsProps> = ({ postId }) => {
 
 	const handleDeleteComment = (id: number) => {
 		dispatch(deleteComment(id))
+	}
+
+	const isLoggedUserAutor = (email: string) => {
+		return email === user?.email
 	}
 
 	const comments = useSelector(selectComments).filter((comment) => comment.postId === postId)
@@ -54,9 +61,15 @@ const CommentsComponent: React.FC<CommentsProps> = ({ postId }) => {
 								<p className='text-sm text-gray-600'>{comment.body}</p>
 							</div>
 						</div>
+						<button
+				className='relative flex items-center gap-x-4 text-sm leading-6 font-semibold text-gray-400 hover:text-red-500'
+				onClick={() => handleDeleteComment(comment.id)}>
+				Delete
+			</button>
 					</li>
 				))}
 			</ul>
+			
 			<hr />
 			<div className='text-center mt-3 uppercase font-semibold'>
 				<h3>Add new comments</h3>
