@@ -10,6 +10,7 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { addPost } from '../features/postSlice'
 import { Post } from '../model/Post'
+import CommentsComponent from './CommentsComponent'
 
 const Home = () => {
 	const user = useSelector(selectUser).loggedUser
@@ -27,11 +28,12 @@ const Home = () => {
         }
     }
 
-	useEffect(() => {
-		dispatch(fetchPosts())
-	}, [dispatch])
-
 	
+	useEffect(() => {
+        if (!user) {
+            navigate("/")
+        }
+    })
 
 	return (
 		<div>
@@ -70,6 +72,8 @@ const Home = () => {
 						<div className='italic  text-center p-5'>
 							<p>{post.body}</p>
 						</div>
+						<hr />
+						<CommentsComponent postId={post.id} />
 					</div>
 				))}
 			</div>
